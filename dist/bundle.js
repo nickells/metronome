@@ -63,17 +63,114 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "<!DOCTYPE html>\n<html>\n<head>\n  <title>Metronome</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n  <script defer type=\"text/javascript\" src=\"dist/bundle.js\"></script>\n  <div class=\"bpm\">60\n  </div>\n  <script>\n  // analytics\n  </script>\n\n</body>\n</html>"
+const { bpmToInterval, clamp } = __webpack_require__(1)
+
+const $bpm = document.getElementsByClassName('bpm')[0]
+
+let _bpm = 60
+let _interval = bpmToInterval(_bpm)
+
+const updateInterval = (newInterval) => _interval = newInterval
+
+const getInterval = () => _interval
+
+const getBpm = () => _bpm
+
+const updateBpm = (newBpm) => {
+  const adjustedBpm = clamp(8, 400, newBpm)
+  $bpm.innerHTML = adjustedBpm
+  _bpm = adjustedBpm
+  updateInterval(bpmToInterval(adjustedBpm))
+}
+
+module.exports = {
+  getBpm,
+  updateBpm,
+  getInterval
+}
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const bpmToInterval = (bpm) => {
+ const seconds = 60 / bpm
+ return seconds * 1000 
+}
+/* harmony export (immutable) */ __webpack_exports__["bpmToInterval"] = bpmToInterval;
+
+
+const getEventFromTouchOrMouse = (event) => event.touches ? event.touches[event.touches.length - 1] : event
+
+const normalizeEventListener = (func) => {
+  return function eventHandler(event) {
+    return func(getEventFromTouchOrMouse(event))
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["normalizeEventListener"] = normalizeEventListener;
+
+
+const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
+/* harmony export (immutable) */ __webpack_exports__["clamp"] = clamp;
+
+
+/***/ }),
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { getBpm, updateBpm } = __webpack_require__(0)
+const { normalizeEventListener } = __webpack_require__(1)
+
+
+// keep track of values for "wheel" functionality
+let isMouseDown = false
+let originalPosition = [0, 0]
+let newPosition = [0, 0]
+let lastTick = 0
+let startBpm = getBpm()
+
+const downListener = normalizeEventListener((event) => {
+  isMouseDown = true
+  originalPosition = [event.clientX, event.clientY]
+})
+
+const upListener = normalizeEventListener((event) => {
+  isMouseDown = false
+  startBpm = getBpm()
+})
+
+const moveListener = normalizeEventListener((event) => {
+  if (!isMouseDown) return
+  const [originalX, originalY] = originalPosition
+  const diff = event.clientX - originalX
+  // Only perform an operation if you have moved 10 pixels
+  const ticks = Math.floor(diff / 10)
+  if (ticks !== lastTick) {
+    updateBpm(startBpm + (ticks * 2))
+    lastTick = ticks
+  }
+})
+
+document.body.addEventListener('touchstart', downListener)
+document.body.addEventListener('mousedown', downListener)
+document.body.addEventListener('touchend', upListener)
+document.body.addEventListener('mouseup', upListener)
+document.body.addEventListener('touchmove', moveListener)
+document.body.addEventListener('mousemove', moveListener)
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -87,109 +184,20 @@ module.exports = "<!DOCTYPE html>\n<html>\n<head>\n  <title>Metronome</title>\n 
  inc/dec
 */
 
-__webpack_require__(4)
-const { $bpm, bpm, getInterval } = __webpack_require__(2)
+__webpack_require__(3)
 
-// require index.html so livereload will watch it
-const index = __webpack_require__(0) // eslint-disable-line no-unused-vars
+const { updateBpm, getInterval } = __webpack_require__(0)
 
 const $sound = new Audio('perc-808.wav')
 
-$bpm.innerHTML = bpm
+updateBpm(60)
 
 function tick(){
-  console.log(getInterval())
   $sound.play()
   setTimeout(tick, getInterval())
 }
+
 tick()
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { bpmToInterval } = __webpack_require__(3)
-
-const $bpm = document.getElementsByClassName('bpm')[0]
-let bpm = 60
-let interval = bpmToInterval(bpm)
-
-const updateInterval = (newInterval) => interval = newInterval
-const getInterval = () => interval
-
-module.exports = {
-  $bpm,
-  bpm,
-  updateInterval,
-  getInterval
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-const bpmToInterval = (bpm) => {
- const seconds = 60 / bpm
- return seconds * 1000 
-}
-/* harmony export (immutable) */ __webpack_exports__["bpmToInterval"] = bpmToInterval;
-
-
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-let {$bpm, bpm, updateInterval} = __webpack_require__(2)
-const { bpmToInterval } = __webpack_require__(3)
-// keep track of values for "wheel" functionality
-let isMouseDown = false
-let originalPosition = [0, 0]
-let newPosition = [0, 0]
-let lastTick = 0
-let startBpm = bpm
-
-const getEventFromTouchOrMouse = (event) => event.touches ? event.touches[event.touches.length - 1] : event
-
-const normalizeEventListener = (func) => {
-  return function eventHandler(event) {
-    return func(getEventFromTouchOrMouse(event))
-  }
-}
-
-const downListener = normalizeEventListener((event) => {
-  isMouseDown = true
-  originalPosition = [event.clientX, event.clientY]
-})
-
-const upListener = normalizeEventListener((event) => {
-  isMouseDown = false
-  startBpm = bpm
-})
-
-const moveListener = normalizeEventListener((event) => {
-  if (!isMouseDown) return
-  const [originalX, originalY] = originalPosition
-  const diff = event.clientX - originalX
-  // Only perform an operation if you have moved 10 pixels
-  const ticks = Math.floor(diff / 10)
-  if (ticks !== lastTick) {
-    bpm = startBpm + (ticks * 2)
-    updateInterval(bpmToInterval(bpm))
-    $bpm.innerHTML = bpm
-    lastTick = ticks
-  }
-})
-
-document.body.addEventListener('touchstart', downListener)
-document.body.addEventListener('mousedown', downListener)
-document.body.addEventListener('touchend', upListener)
-document.body.addEventListener('mouseup', upListener)
-document.body.addEventListener('touchmove', moveListener)
-document.body.addEventListener('mousemove', moveListener)
 
 /***/ })
 /******/ ]);

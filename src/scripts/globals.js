@@ -1,15 +1,25 @@
-const { bpmToInterval } = require('./utils')
+const { bpmToInterval, clamp } = require('./utils')
 
 const $bpm = document.getElementsByClassName('bpm')[0]
-let bpm = 60
-let interval = bpmToInterval(bpm)
 
-const updateInterval = (newInterval) => interval = newInterval
-const getInterval = () => interval
+let _bpm = 60
+let _interval = bpmToInterval(_bpm)
+
+const updateInterval = (newInterval) => _interval = newInterval
+
+const getInterval = () => _interval
+
+const getBpm = () => _bpm
+
+const updateBpm = (newBpm) => {
+  const adjustedBpm = clamp(8, 400, newBpm)
+  $bpm.innerHTML = adjustedBpm
+  _bpm = adjustedBpm
+  updateInterval(bpmToInterval(adjustedBpm))
+}
 
 module.exports = {
-  $bpm,
-  bpm,
-  updateInterval,
+  getBpm,
+  updateBpm,
   getInterval
 }

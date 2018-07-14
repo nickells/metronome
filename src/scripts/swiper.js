@@ -1,19 +1,13 @@
-let {$bpm, bpm, updateInterval} = require('./globals')
-const { bpmToInterval } = require('./utils')
+const { getBpm, updateBpm } = require('./globals')
+const { normalizeEventListener } = require('./utils')
+
+
 // keep track of values for "wheel" functionality
 let isMouseDown = false
 let originalPosition = [0, 0]
 let newPosition = [0, 0]
 let lastTick = 0
-let startBpm = bpm
-
-const getEventFromTouchOrMouse = (event) => event.touches ? event.touches[event.touches.length - 1] : event
-
-const normalizeEventListener = (func) => {
-  return function eventHandler(event) {
-    return func(getEventFromTouchOrMouse(event))
-  }
-}
+let startBpm = getBpm()
 
 const downListener = normalizeEventListener((event) => {
   isMouseDown = true
@@ -22,7 +16,7 @@ const downListener = normalizeEventListener((event) => {
 
 const upListener = normalizeEventListener((event) => {
   isMouseDown = false
-  startBpm = bpm
+  startBpm = getBpm()
 })
 
 const moveListener = normalizeEventListener((event) => {
@@ -32,9 +26,7 @@ const moveListener = normalizeEventListener((event) => {
   // Only perform an operation if you have moved 10 pixels
   const ticks = Math.floor(diff / 10)
   if (ticks !== lastTick) {
-    bpm = startBpm + (ticks * 2)
-    updateInterval(bpmToInterval(bpm))
-    $bpm.innerHTML = bpm
+    updateBpm(startBpm + (ticks * 2))
     lastTick = ticks
   }
 })

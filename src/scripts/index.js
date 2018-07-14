@@ -10,18 +10,16 @@
 */
 
 require('./swiper')
-const { $bpm, bpm, getInterval } = require('./globals')
 
-// require index.html so livereload will watch it
-const index = require('../../index.html') // eslint-disable-line no-unused-vars
+const { updateBpm, getInterval } = require('./globals')
 
 const $sound = new Audio('perc-808.wav')
 
-$bpm.innerHTML = bpm
+updateBpm(60)
 
 function tick(){
-  console.log(getInterval())
   $sound.play()
   setTimeout(tick, getInterval())
 }
+
 tick()
