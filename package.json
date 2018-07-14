@@ -24,6 +24,6 @@
   "dependencies": {
     "css-loader": "^0.28.4",
     "raw-loader": "^0.5.1",
-    "save-dev": "^2.0.0"
+    "yargs-parser": "^10.1.0"
   }
 }
