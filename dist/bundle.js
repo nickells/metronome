@@ -87,35 +87,68 @@ module.exports = "<!DOCTYPE html>\n<html>\n<head>\n  <title>Metronome</title>\n 
  inc/dec
 */
 
+__webpack_require__(4)
+const { $bpm, bpm, getInterval } = __webpack_require__(2)
+
 // require index.html so livereload will watch it
 const index = __webpack_require__(0) // eslint-disable-line no-unused-vars
 
-const $bpm = document.getElementsByClassName('bpm')[0]
-
-const bpmToInterval = (bpm) => {
- const seconds = 60 / bpm
- return seconds * 1000 
-}
-
 const $sound = new Audio('perc-808.wav')
-
-
-let isMouseDown = false
-let originalPosition = [0, 0]
-let newPosition = [0, 0]
-let bpm = 60
-let interval = bpmToInterval(bpm)
 
 $bpm.innerHTML = bpm
 
 function tick(){
+  console.log(getInterval())
   $sound.play()
-  setTimeout(tick, interval)
+  setTimeout(tick, getInterval())
 }
 tick()
 
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
 
+const { bpmToInterval } = __webpack_require__(3)
+
+const $bpm = document.getElementsByClassName('bpm')[0]
+let bpm = 60
+let interval = bpmToInterval(bpm)
+
+const updateInterval = (newInterval) => interval = newInterval
+const getInterval = () => interval
+
+module.exports = {
+  $bpm,
+  bpm,
+  updateInterval,
+  getInterval
+}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const bpmToInterval = (bpm) => {
+ const seconds = 60 / bpm
+ return seconds * 1000 
+}
+/* harmony export (immutable) */ __webpack_exports__["bpmToInterval"] = bpmToInterval;
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+let {$bpm, bpm, updateInterval} = __webpack_require__(2)
+const { bpmToInterval } = __webpack_require__(3)
 // keep track of values for "wheel" functionality
+let isMouseDown = false
+let originalPosition = [0, 0]
+let newPosition = [0, 0]
 let lastTick = 0
 let startBpm = bpm
 
@@ -145,7 +178,7 @@ const moveListener = normalizeEventListener((event) => {
   const ticks = Math.floor(diff / 10)
   if (ticks !== lastTick) {
     bpm = startBpm + (ticks * 2)
-    interval = bpmToInterval(bpm)
+    updateInterval(bpmToInterval(bpm))
     $bpm.innerHTML = bpm
     lastTick = ticks
   }
