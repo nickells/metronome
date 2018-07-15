@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,6 +73,7 @@
 const { bpmToInterval, clamp } = __webpack_require__(1)
 
 const $bpm = document.getElementsByClassName('bpm')[0]
+const $sound = new Audio('perc-808.wav')
 
 let _bpm = 60
 let _interval = bpmToInterval(_bpm)
@@ -83,17 +84,24 @@ const getInterval = () => _interval
 
 const getBpm = () => _bpm
 
+
 const updateBpm = (newBpm) => {
-  const adjustedBpm = clamp(8, 400, newBpm)
-  $bpm.innerHTML = adjustedBpm
-  _bpm = adjustedBpm
-  updateInterval(bpmToInterval(adjustedBpm))
+  _bpm = clamp(30, 400, newBpm)
+  $bpm.innerHTML = _bpm
+  updateInterval(bpmToInterval(_bpm))
+}
+
+
+function tick(){
+  $sound.play()
+  setTimeout(tick, getInterval())
 }
 
 module.exports = {
   getBpm,
   updateBpm,
-  getInterval
+  getInterval,
+  tick
 }
 
 /***/ }),
@@ -124,12 +132,13 @@ const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { getBpm, updateBpm } = __webpack_require__(0)
 const { normalizeEventListener } = __webpack_require__(1)
+
+const $bpm = document.getElementsByClassName('bpm')[0]
 
 
 // keep track of values for "wheel" functionality
@@ -161,21 +170,22 @@ const moveListener = normalizeEventListener((event) => {
   }
 })
 
-document.body.addEventListener('touchstart', downListener)
-document.body.addEventListener('mousedown', downListener)
-document.body.addEventListener('touchend', upListener)
-document.body.addEventListener('mouseup', upListener)
-document.body.addEventListener('touchmove', moveListener)
-document.body.addEventListener('mousemove', moveListener)
+$bpm.addEventListener('touchstart', downListener)
+$bpm.addEventListener('mousedown', downListener)
+
+$bpm.addEventListener('touchend', upListener)
+$bpm.addEventListener('mouseup', upListener)
+
+$bpm.addEventListener('touchmove', moveListener)
+$bpm.addEventListener('mousemove', moveListener)
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
  todo:
- touch capable
  tap tempo
  emphasis chooser
  sound pick
@@ -184,20 +194,38 @@ document.body.addEventListener('mousemove', moveListener)
  inc/dec
 */
 
-__webpack_require__(3)
+__webpack_require__(2)
+__webpack_require__(4)
 
-const { updateBpm, getInterval } = __webpack_require__(0)
-
-const $sound = new Audio('perc-808.wav')
+const { updateBpm, tick } = __webpack_require__(0)
 
 updateBpm(60)
 
-function tick(){
-  $sound.play()
-  setTimeout(tick, getInterval())
+tick()
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { getBpm, updateBpm } = __webpack_require__(0)
+
+const [ $minus, $plus ] = document.querySelectorAll('.inc-dec div')
+
+const add = () => {
+  updateBpm(getBpm() + 2)
 }
 
-tick()
+const subtract = (e) => {
+  updateBpm(getBpm() - 2)
+}
+
+$minus.addEventListener('click', subtract)
+// $minus.addEventListener('touchend', subtract)
+
+$plus.addEventListener('click', add)
+// $plus.addEventListener('touchend', add)
+
+console.log($minus, $plus)
 
 /***/ })
 /******/ ]);

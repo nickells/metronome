@@ -1,6 +1,8 @@
 const { getBpm, updateBpm } = require('./globals')
 const { normalizeEventListener } = require('./utils')
 
+const $bpm = document.getElementsByClassName('bpm')[0]
+
 
 // keep track of values for "wheel" functionality
 let isMouseDown = false
@@ -31,9 +33,11 @@ const moveListener = normalizeEventListener((event) => {
   }
 })
 
-document.body.addEventListener('touchstart', downListener)
-document.body.addEventListener('mousedown', downListener)
-document.body.addEventListener('touchend', upListener)
-document.body.addEventListener('mouseup', upListener)
-document.body.addEventListener('touchmove', moveListener)
-document.body.addEventListener('mousemove', moveListener)
+$bpm.addEventListener('touchstart', downListener)
+$bpm.addEventListener('mousedown', downListener)
+
+$bpm.addEventListener('touchend', upListener)
+$bpm.addEventListener('mouseup', upListener)
+
+$bpm.addEventListener('touchmove', moveListener)
+$bpm.addEventListener('mousemove', moveListener)

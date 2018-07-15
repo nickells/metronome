@@ -1,6 +1,5 @@
 /*
  todo:
- touch capable
  tap tempo
  emphasis chooser
  sound pick
@@ -10,16 +9,10 @@
 */
 
 require('./swiper')
+require('./inc-dec')
 
-const { updateBpm, getInterval } = require('./globals')
-
-const $sound = new Audio('perc-808.wav')
+const { updateBpm, tick } = require('./globals')
 
 updateBpm(60)
-
-function tick(){
-  $sound.play()
-  setTimeout(tick, getInterval())
-}
 
 tick()
