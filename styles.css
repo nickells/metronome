@@ -44,13 +44,43 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .inc-dec div {
-  height: 30vw;
+  height: 20vh;
   border: 1px solid black;
   display: flex;
+  width: 33.3333%;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
 }
+.inc-dec div:nth-child(1) {
+  border-left: 0px;
+}
 .inc-dec div:nth-child(2) {
   border-left: 0px;
+  border-right: 0px;
+}
+.controls {
+  display: flex;
+  width: 100%;
+  height: 20vh;
+  font-family: 'AkzidenzGroteskLight';
+}
+.controls .sound {
+  width: calc(66.66666667%);
+  flex-direction: column;
+}
+.controls .sound div {
+  border: 1px solid black;
+  border-width: 0px 0px 1px 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+}
+.controls .mute {
+  width: calc(33.33333333%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
 }

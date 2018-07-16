@@ -17,7 +17,6 @@ const { updateBpm, tick } = require('./globals')
 
 
 document.body.addEventListener('click', function init(){
-  window.scrollTo(0,1)
   // document.documentElement.requestFullscreen()
   // document.documentElement.webkitRequestFullscreen()
   tick()

@@ -71,6 +71,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const { bpmToInterval, clamp } = __webpack_require__(1)
+const { getMutedStatus } = __webpack_require__(5)
+const { getCurrentSound } = __webpack_require__(6)
 
 const $bpm = document.getElementsByClassName('bpm')[0]
 const $sound = new Audio('perc-808.wav')
@@ -93,7 +95,9 @@ const updateBpm = (newBpm) => {
 
 
 function tick(){
-  $sound.play()
+  if (!getMutedStatus()) {
+    getCurrentSound().play()
+  }
   setTimeout(tick, getInterval())
 }
 
@@ -203,7 +207,6 @@ const { updateBpm, tick } = __webpack_require__(0)
 
 
 document.body.addEventListener('click', function init(){
-  window.scrollTo(0,1)
   // document.documentElement.requestFullscreen()
   // document.documentElement.webkitRequestFullscreen()
   tick()
@@ -236,6 +239,46 @@ $plus.addEventListener('click', add)
 // $plus.addEventListener('touchend', add)
 
 console.log($minus, $plus)
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+const $toggle = document.getElementsByClassName('mute')[0]
+
+let _isMuted = false
+
+$toggle.addEventListener('click', () => {
+  _isMuted = !_isMuted
+})
+
+
+module.exports = {
+  getMutedStatus: () => _isMuted
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+const sounds = {
+  woodblock: new Audio('perc-808.wav'),
+  hihat: new Audio('hihat-acoustic01.wav')
+}
+  
+const $sounds = document.querySelectorAll('.sound div')
+
+let _currentSound = sounds.woodblock
+
+$sounds.forEach($sound => {
+  $sound.addEventListener('click', (e) => {
+    _currentSound = sounds[e.target.innerHTML.toLowerCase()]
+  })
+})
+
+module.exports = {
+  getCurrentSound: () => _currentSound
+}
 
 /***/ })
 /******/ ]);

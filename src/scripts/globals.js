@@ -1,4 +1,6 @@
 const { bpmToInterval, clamp } = require('./utils')
+const { getMutedStatus } = require('./mute')
+const { getCurrentSound } = require('./sounds')
 
 const $bpm = document.getElementsByClassName('bpm')[0]
 const $sound = new Audio('perc-808.wav')
@@ -21,7 +23,9 @@ const updateBpm = (newBpm) => {
 
 
 function tick(){
-  $sound.play()
+  if (!getMutedStatus()) {
+    getCurrentSound().play()
+  }
   setTimeout(tick, getInterval())
 }
 
