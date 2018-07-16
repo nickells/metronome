@@ -8,11 +8,20 @@
  inc/dec
 */
 
+
 require('./swiper')
 require('./inc-dec')
 
 const { updateBpm, tick } = require('./globals')
 
-updateBpm(60)
 
-tick()
+window.scrollTo(0,1);
+
+document.body.addEventListener('click', function init(){
+  // document.documentElement.requestFullscreen()
+  // document.documentElement.webkitRequestFullscreen()
+  tick()
+  document.body.removeEventListener('click', init)
+})
+
+updateBpm(60)

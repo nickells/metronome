@@ -194,14 +194,24 @@ $bpm.addEventListener('mousemove', moveListener)
  inc/dec
 */
 
+
 __webpack_require__(2)
 __webpack_require__(4)
 
 const { updateBpm, tick } = __webpack_require__(0)
 
+
+window.scrollTo(0,1);
+
+document.body.addEventListener('click', function init(){
+  // document.documentElement.requestFullscreen()
+  // document.documentElement.webkitRequestFullscreen()
+  tick()
+  document.body.removeEventListener('click', init)
+})
+
 updateBpm(60)
 
-tick()
 
 /***/ }),
 /* 4 */
