@@ -15,9 +15,9 @@ require('./inc-dec')
 const { updateBpm, tick } = require('./globals')
 
 
-window.scrollTo(0,1);
 
 document.body.addEventListener('click', function init(){
+  window.scrollTo(0,1)
   // document.documentElement.requestFullscreen()
   // document.documentElement.webkitRequestFullscreen()
   tick()

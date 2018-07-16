@@ -201,9 +201,9 @@ __webpack_require__(4)
 const { updateBpm, tick } = __webpack_require__(0)
 
 
-window.scrollTo(0,1);
 
 document.body.addEventListener('click', function init(){
+  window.scrollTo(0,1)
   // document.documentElement.requestFullscreen()
   // document.documentElement.webkitRequestFullscreen()
   tick()
