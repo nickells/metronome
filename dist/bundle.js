@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -140,6 +140,30 @@ const clamp = (min, max, value) => Math.min(Math.max(min, value), max)
 /***/ (function(module, exports, __webpack_require__) {
 
 const { getBpm, updateBpm } = __webpack_require__(0)
+
+const [ $minus, $plus ] = document.querySelectorAll('.inc-dec div')
+
+const add = () => {
+  updateBpm(getBpm() + 2)
+}
+
+const subtract = (e) => {
+  updateBpm(getBpm() - 2)
+}
+
+$minus.addEventListener('click', subtract)
+// $minus.addEventListener('touchend', subtract)
+
+$plus.addEventListener('click', add)
+// $plus.addEventListener('touchend', add)
+
+console.log($minus, $plus)
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { getBpm, updateBpm } = __webpack_require__(0)
 const { normalizeEventListener } = __webpack_require__(1)
 
 const $bpm = document.getElementsByClassName('bpm')[0]
@@ -185,7 +209,7 @@ $bpm.addEventListener('mousemove', moveListener)
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -199,8 +223,8 @@ $bpm.addEventListener('mousemove', moveListener)
 */
 
 
+__webpack_require__(3)
 __webpack_require__(2)
-__webpack_require__(4)
 
 const { updateBpm, tick } = __webpack_require__(0)
 
@@ -217,30 +241,6 @@ updateBpm(60)
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { getBpm, updateBpm } = __webpack_require__(0)
-
-const [ $minus, $plus ] = document.querySelectorAll('.inc-dec div')
-
-const add = () => {
-  updateBpm(getBpm() + 2)
-}
-
-const subtract = (e) => {
-  updateBpm(getBpm() - 2)
-}
-
-$minus.addEventListener('click', subtract)
-// $minus.addEventListener('touchend', subtract)
-
-$plus.addEventListener('click', add)
-// $plus.addEventListener('touchend', add)
-
-console.log($minus, $plus)
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
@@ -250,6 +250,7 @@ let _isMuted = false
 
 $toggle.addEventListener('click', () => {
   _isMuted = !_isMuted
+  $toggle.querySelector('span').innerHTML = _isMuted ? 'UNMUTE' : 'MUTE'
 })
 
 
