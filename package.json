@@ -13,16 +13,16 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.3.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.14.0",
     "extract-text-webpack-plugin": "^2.1.2",
-    "less": "^2.7.2",
-    "less-loader": "^4.0.4",
-    "webpack": "^2.6.1",
+    "less": "^2.7.3",
+    "less-loader": "^4.1.0",
+    "webpack": "^2.7.0",
     "webpack-livereload-plugin": "^1.2.0"
   },
   "dependencies": {
-    "css-loader": "^0.28.4",
+    "css-loader": "^0.28.11",
     "raw-loader": "^0.5.1",
     "yargs-parser": "^10.1.0"
   }
